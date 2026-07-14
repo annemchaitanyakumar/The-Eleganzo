@@ -57,12 +57,12 @@ export default function Navbar() {
   return (
     <>
       <motion.header
-        initial={{ y: -100, x: "-50%" }}
-        animate={{ y: 0, x: "-50%" }}
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1], delay: 1.5 }}
-        className="fixed top-4 left-1/2 w-[calc(100%-2rem)] max-w-[1440px] z-[100]"
+        className="fixed top-4 left-0 right-0 w-[calc(100%-2rem)] max-w-[1440px] mx-auto z-[100]"
       >
-        <nav className={`w-full flex items-center justify-between px-6 md:px-12 py-4 rounded-full border transition-all duration-700 ${
+        <nav className={`w-full flex items-center justify-between px-6 md:px-12 py-4 rounded-full border transition-[background-color,border-color,box-shadow,backdrop-filter] duration-700 ${
           isScrolled
             ? 'bg-background-cream/70 backdrop-blur-xl border-accent-gold/20 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.6)]'
             : 'bg-transparent border-transparent'
