@@ -30,15 +30,37 @@ export default function Navbar() {
     setIsMenuOpen(false);
   }, [location.pathname, setIsMenuOpen]);
 
+  // Lock scroll on mobile menu open
+  const lenis = useStore((state) => state.lenis);
+  useEffect(() => {
+    if (isMenuOpen) {
+      if (lenis) lenis.stop();
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.overflow = 'hidden';
+      if (scrollbarWidth > 0) {
+        document.body.style.paddingRight = `${scrollbarWidth}px`;
+      }
+    } else {
+      if (lenis) lenis.start();
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    }
+    return () => {
+      if (lenis) lenis.start();
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    };
+  }, [isMenuOpen, lenis]);
+
   const isHome = location.pathname === '/';
 
   return (
     <>
       <motion.header
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
+        initial={{ y: -100, x: "-50%" }}
+        animate={{ y: 0, x: "-50%" }}
         transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1], delay: 1.5 }}
-        className="fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-[1440px] z-[100] transition-all duration-700 ease-[cubic-bezier(0.76,0,0.24,1)]"
+        className="fixed top-4 left-1/2 w-[calc(100%-2rem)] max-w-[1440px] z-[100]"
       >
         <nav className={`w-full flex items-center justify-between px-6 md:px-12 py-4 rounded-full border transition-all duration-700 ${
           isScrolled
@@ -87,7 +109,9 @@ export default function Navbar() {
             {/* Hamburger */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden relative z-10 p-2 text-text-primary transition-colors duration-300"
+              className={`lg:hidden relative z-10 p-2 transition-colors duration-300 ${
+                isMenuOpen ? 'text-[#FAF9F6]' : 'text-text-primary'
+              }`}
               aria-label="Toggle menu"
             >
               {isMenuOpen ? <HiOutlineX size={22} /> : <HiOutlineMenuAlt4 size={22} />}

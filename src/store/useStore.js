@@ -20,6 +20,7 @@ const useStore = create((set) => ({
   setCursorVariant: (variant) => set({ cursorVariant: variant }),
   setCursorText: (text) => set({ cursorText: text }),
   setCursor: (variant, text = '') => set({ cursorVariant: variant, cursorText: text }),
+  resetCursor: () => set({ cursorVariant: 'default', cursorText: '' }),
   // Lenis instance
   lenis: null,
   setLenis: (lenis) => set({ lenis }),

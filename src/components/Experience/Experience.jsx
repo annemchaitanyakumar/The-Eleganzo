@@ -54,14 +54,27 @@ export default function Journey() {
   const activeRef = useRef(0); // always-current ref for use inside event listener
   const lenis = useStore((state) => state.lenis);
   const lenisRef = useRef(lenis);
+  const [isDesktop, setIsDesktop] = useState(typeof window !== 'undefined' ? window.innerWidth >= 1024 : true);
 
   // Keep lenisRef in sync
   useEffect(() => { lenisRef.current = lenis; }, [lenis]);
   // Keep activeRef in sync
   useEffect(() => { activeRef.current = active; }, [active]);
 
+  // Window resize handler for responsiveness
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+    handleResize(); // set initial client state
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // Snap section to viewport center when it first enters view
   useEffect(() => {
+    if (!isDesktop) return;
+
     const section = sectionRef.current;
     if (!section) return;
 
@@ -93,7 +106,7 @@ export default function Journey() {
 
     observer.observe(section);
     return () => observer.disconnect();
-  }, []); // runs once on mount
+  }, [isDesktop]);
 
   // Animate image on step change
   useEffect(() => {
@@ -107,6 +120,8 @@ export default function Journey() {
 
   // Wheel listener — attached as non-passive so we can preventDefault
   useEffect(() => {
+    if (!isDesktop) return;
+
     const section = sectionRef.current;
     if (!section) return;
 
@@ -146,18 +161,18 @@ export default function Journey() {
     // passive: false is required to call preventDefault on wheel events
     section.addEventListener('wheel', onWheel, { passive: false });
     return () => section.removeEventListener('wheel', onWheel);
-  }, []); // no deps — uses refs to stay current
+  }, [isDesktop]); // Re-register on breakpoint change
 
   const current = experiences[active];
 
   return (
     /*
       data-lenis-prevent — tells Lenis to NOT intercept wheel events on this element.
-      Our own listener (passive:false) handles them exclusively.
+      Our own listener (passive:false) handles them exclusively on desktop.
     */
     <section
       ref={sectionRef}
-      data-lenis-prevent
+      data-lenis-prevent={isDesktop ? '' : undefined}
       className="py-20 md:py-28 px-6 md:px-16 max-w-[1400px] mx-auto"
     >
       {/* Header */}
