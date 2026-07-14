@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" fill="#183222" />
+  <circle cx="50" cy="50" r="35" fill="none" stroke="#B6955B" stroke-width="2" />
+  <text x="50" y="58" font-family="'Cormorant Garamond', 'Georgia', serif" font-size="28" fill="#B6955B" text-anchor="middle" letter-spacing="2">E</text>
+</svg>
